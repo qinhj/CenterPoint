@@ -47,6 +47,11 @@ class PointPillars(SingleStageDetector):
 
         x = self.extract_feat(data)
         preds = self.bbox_head(x)
+        
+        ## for dump preds
+        self.preds = preds
+        if self.export_onnx:
+            return preds
 
         if return_loss:
             return self.bbox_head.loss(example, preds)
