@@ -6,6 +6,10 @@ from onnx import numpy_helper, helper
 import numpy as np
 from copy import deepcopy
 
+## (D, N, P), e.g.
+#num_dims = 10  # the dimension of lidar point representation(D)
+num_point = 20  # the number of lidar points per pillar(N)
+#num_pillar = 512*512 # the number of non-empty pillars per sample(P)
 
 ## map: name -> index
 def map_name_to_index(graph_prop_list):
@@ -121,7 +125,7 @@ if __name__ == "__main__":
             model.graph.node.remove(node)
             node = helper.make_node(op_type="MaxPool",
                 inputs=node.input, outputs=node.output, name=node.name,
-                ceil_mode = 0, kernel_shape = [1,20], pads = [0,0,0,0], strides=[1,1])
+                ceil_mode = 0, kernel_shape = [1,num_point], pads = [0,0,0,0], strides=[1,1])
             model.graph.node.insert(i, node)
         
         # update input tensor("repeats") of Tile
@@ -130,7 +134,7 @@ if __name__ == "__main__":
             arr_index = map_init[arr_name]
             arr_tensor = model.graph.initializer[arr_index]
             model.graph.initializer.remove(arr_tensor)
-            arr_array = np.array([1,1,1,20], np.int64)
+            arr_array = np.array([1,1,1,num_point], np.int64)
             arr_tensor = numpy_helper.from_array(arr_array, name=arr_name)
             model.graph.initializer.insert(arr_index, arr_tensor)
         
