@@ -240,7 +240,7 @@ class CenterHead(nn.Module):
 
         for task in self.tasks:
             ret_dicts.append(task(x))
-
+        self.ret_dicts = ret_dicts
         return ret_dicts
 
     def _sigmoid(self, x):
