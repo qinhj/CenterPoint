@@ -24,7 +24,7 @@ target_assigner = dict(
 model = dict(
     type="PointPillars",
     pretrained=None,
-    # export_onnx=True,
+    export_onnx=True,
     reader=dict(
         type="PillarFeatureNet",
         num_filters=[64, 64],
@@ -32,7 +32,7 @@ model = dict(
         with_distance=False,
         voxel_size=(0.2, 0.2, 8),
         pc_range=(-51.2, -51.2, -5.0, 51.2, 51.2, 3.0),
-        # export_onnx=True,
+        export_onnx=True,
     ),
     backbone=dict(type="PointPillarsScatter", ds_factor=1),
     neck=dict(
@@ -161,8 +161,8 @@ test_pipeline = [
     dict(type="Reformat"),
 ]
 
-train_anno = "demo/nuScenes/demo_infos.pkl"
-val_anno = "demo/nuScenes/demo_infos.pkl"
+train_anno = "demo/nuScenes/dbinfos_train_10sweeps_withvelo.pkl"
+val_anno = "demo/nuScenes/infos_val_10sweeps_withvelo_filter_True.pkl"
 test_anno = None
 
 data = dict(
@@ -225,5 +225,5 @@ dist_params = dict(backend="nccl", init_method="env://")
 log_level = "INFO"
 work_dir = './work_dirs/{}/'.format(__file__[__file__.rfind('/') + 1:-3])
 load_from = None
-resume_from = None 
+resume_from = None
 workflow = [('train', 1)]
